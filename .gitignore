@@ -1,0 +1,39 @@
+#---------------------------------------#
+# Project Ignores                       #
+#---------------------------------------#
+
+# Maven
+target/
+
+# Compiled class file
+*.class
+
+# Package Files
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+
+
+#---------------------------------------#
+# IDEs & Editors Ignores                #
+#---------------------------------------#
+
+# Eclipse
+.project
+.classpath
+.settings
+
+# Netbeans
+nbactions*.xml
+nb-configuration*.xml
+
+# JetBrains IDEs
+.idea/
+*.iml
+
+# VS Code
+/.vscode
