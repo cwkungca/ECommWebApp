@@ -37,3 +37,14 @@ nb-configuration*.xml
 
 # VS Code
 /.vscode
+
+
+
+#---------------------------------------#
+# OSX Ignores                           #
+#---------------------------------------#
+
+.DS_Store
+.AppleDouble
+.LSOverride
+.localized
