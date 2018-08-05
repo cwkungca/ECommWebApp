@@ -6,8 +6,7 @@
 
 	<a href="#" class="categoryButton"> <span class="categoryText">meats</span>
 	</a> <a href="#" class="categoryButton"> <span class="categoryText">bakery</span>
-	</a> <a href="#" class="categoryButton"> <span class="categoryText">fruit
-			& veg</span>
+	</a> <a href="#" class="categoryButton"> <span class="categoryText">fruit & veg</span>
 	</a>
 </div>
 
