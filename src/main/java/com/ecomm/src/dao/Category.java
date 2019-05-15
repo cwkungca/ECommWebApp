@@ -11,42 +11,29 @@
 
 package com.ecomm.src.dao;
 
+import java.io.InputStream;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Optional;
+
 /**
  *
  * @author WayneKung
  */
-public class Category {
-    private String id;
-    private String name;
-    private boolean isDelete;
+public class Category extends ImgEntity{
+    private Optional<Collection<Product>> optCatProducts = Optional.empty();
     
     public Category() {}
     
-    public Category(String categId, String categName, boolean isDelete) {
-        this.id = categId;
-        this.name = categName;
-        this.isDelete = isDelete;
-    }
-    
-    public String getId() {
-        return id;
-    }
-    public void setId(String id) {
-        this.id = id;
-    }
-    
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
-    
-    public boolean isDelete() {
-        return isDelete;
-    }
-    public void setDelete(boolean isDelete) {
-        this.isDelete = isDelete;
+    public Category(String id, String name, String imgFormate, InputStream img, String imgPath, Date lastUpdate, boolean isDelete) {
+        super(id, name, imgFormate, img, imgPath, lastUpdate, isDelete);
     }
 
+    public Optional<Collection<Product>> getCatProducts() {
+        return optCatProducts;
+    }
+
+    public void setCatProducts(Optional<Collection<Product>> optCatProducts) {
+        this.optCatProducts = optCatProducts;
+    }
 }

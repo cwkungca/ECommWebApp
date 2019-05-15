@@ -13,10 +13,11 @@ package com.ecomm.src.dao;
 
 /**
  *
- * @author WayneKung
+ * @author WayneKung-TPX
  */
-public interface CategoryDao extends CommonDao<Category>{
+public interface RolDao extends CommonDao<Rol> {
 
-    public Category getCatProducts(Object categoryId);
+    public boolean addRolPermission(Rol rol);
     
+    public boolean updateRolPermission(Rol rol);
 }

@@ -13,10 +13,8 @@ package com.ecomm.src.dao;
 
 /**
  *
- * @author WayneKung
+ * @author WayneKung-TPX
  */
-public interface CategoryDao extends CommonDao<Category>{
+public interface StaffDao extends CommonDao<Staff> {
 
-    public Category getCatProducts(Object categoryId);
-    
 }

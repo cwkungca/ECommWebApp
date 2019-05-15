@@ -9,14 +9,12 @@
  * into with WayneKung Co., Ltd.
  */
 
-package com.ecomm.src.dao;
+package com.ecomm.src.model;
 
 /**
  *
- * @author WayneKung
+ * @author WayneKung-TPX
  */
-public interface CategoryDao extends CommonDao<Category>{
+public interface UserAction {
 
-    public Category getCatProducts(Object categoryId);
-    
 }

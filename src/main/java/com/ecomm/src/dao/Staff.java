@@ -11,36 +11,40 @@
 
 package com.ecomm.src.dao;
 
+import java.util.Date;
+
 /**
  *
- * @author WayneKung
+ * @author WayneKung-TPX
  */
-public class Customer {
+public class Staff {
     private String id;
-    private String name;
+    private String firstName;
+    private String lastName;
     private String email;
     private String password;
     private String phone;
     private String address;
-    private String cityRegion;
-    private String ccNumber;
     private boolean isActive;
     private String activeCode;
+    private Date lastUpdate;
+    private Rol rol;
     private boolean isDelete;
     
-    public Customer() {}
+    public Staff() {}
     
-    public Customer(String id, String name, String email, String password, String phone, String address, String cityRegion, String ccNumber, boolean isActive, String activeCode, boolean isDelete) {
+    public Staff(String id, String firstName, String lastName, String email, String password, String phone, String address, boolean isActive, String activeCode, Date lastUpdate, Rol rol, boolean isDelete) {
         this.id = id;
-        this.name = name;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.phone = phone;
         this.address = address;
-        this.cityRegion = cityRegion;
-        this.ccNumber = ccNumber;
         this.isActive = isActive;
         this.activeCode = activeCode;
+        this.lastUpdate = lastUpdate;
+        this.rol = rol;
         this.isDelete = isDelete;
     }
     
@@ -51,11 +55,18 @@ public class Customer {
         this.id = id;
     }
     
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+    
+    public String getLastName() {
+        return lastName;
+    }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
     
     public String getEmail() {
@@ -86,20 +97,6 @@ public class Customer {
         this.address = address;
     }
     
-    public String getCityRegion() {
-        return cityRegion;
-    }
-    public void setCityRegion(String cityRegion) {
-        this.cityRegion = cityRegion;
-    }
-    
-    public String getCcNumber() {
-        return ccNumber;
-    }
-    public void setCcNumber(String ccNumber) {
-        this.ccNumber = ccNumber;
-    }
-    
     public boolean isActive() {
         return isActive;
     }
@@ -114,11 +111,25 @@ public class Customer {
         this.activeCode = activeCode;
     }
     
+    public Date getLastUpdate() {
+        return lastUpdate;
+    }
+    public void setLastUpdate(Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
+    public Rol getRol() {
+        return rol;
+    }
+    public void setRol(Rol rol) {
+        this.rol = rol;
+    }
+    
     public boolean isDelete() {
         return isDelete;
     }
     public void setDelete(boolean isDelete) {
         this.isDelete = isDelete;
     }
-    
+
 }

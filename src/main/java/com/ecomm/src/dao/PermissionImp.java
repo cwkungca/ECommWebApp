@@ -25,18 +25,18 @@ import javax.sql.DataSource;
 
 /**
  *
- * @author WayneKung
+ * @author WayneKung-TPX
  */
-public class ProductImp implements ProductDao {
+public class PermissionImp implements PermissionDao {
 
     @Override
-    public boolean add(Product product) {
+    public boolean add(Permission permission) {
         boolean isAdded = false;
         java.util.Date currentTime = new java.util.Date();
         Optional<DataSource> optDs = getDataSource();
         Optional<Connection> optConn = Optional.empty();
         
-        String query = "INSERT INTO product (id, name, price, quantity, description, imgFormate, img, imgPath, last_Update, category_id, isDelete) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
+        String query = "INSERT INTO permission (id, name, description, last_Update, isDelete) VALUES(?,?,?,?,?)";
         
         if(optDs.isPresent()) {
             try {
@@ -44,17 +44,11 @@ public class ProductImp implements ProductDao {
                 
                 if(optConn.isPresent()) {
                     PreparedStatement pstm = optConn.get().prepareStatement(query);
-                    pstm.setString(1, product.getId());
-                    pstm.setString(2, product.getName());
-                    pstm.setDouble(3, product.getPrice());
-                    pstm.setInt(4, product.getQuantity());
-                    pstm.setString(5, product.getDescription());
-                    pstm.setString(6, product.getImgFormate());
-                    pstm.setBlob(7, product.getImg());
-                    pstm.setString(8, product.getImgPath());
-                    pstm.setTimestamp(9, new Timestamp(currentTime.getTime()));
-                    pstm.setString(10, product.getCategoryId());
-                    pstm.setBoolean(11, product.isDelete());
+                    pstm.setString(1, permission.getId());
+                    pstm.setString(2, permission.getName());
+                    pstm.setString(3, permission.getDescription());
+                    pstm.setTimestamp(4, new Timestamp(currentTime.getTime()));
+                    pstm.setBoolean(5, permission.isDelete());
                     
                     if(pstm.executeUpdate() == 1) {
                         isAdded = true;
@@ -76,13 +70,13 @@ public class ProductImp implements ProductDao {
     }
 
     @Override
-    public List<Product> getAll(){
-        List<Product> productList = new ArrayList<Product>();
+    public List<Permission> getAll() {
+        List<Permission> permList = new ArrayList<Permission>();
         Optional<DataSource> optDs = getDataSource();
         Optional<Connection> optConn = Optional.empty();
         
-        String query = "SELECT id, name, price, quantity, description, imgFormate, img, imgPath, last_Update, category_id, isDelete FROM product";
-        
+        String query = "SELECT id, name, description, last_Update, isDelete FROM permission";
+
         if(optDs.isPresent()) {
             try {
                 optConn = Optional.ofNullable(optDs.get().getConnection());
@@ -92,20 +86,15 @@ public class ProductImp implements ProductDao {
                     
                     ResultSet rs = pstm.executeQuery();
                     while(rs.next()){
-                        productList.add(new Product(
+                        permList.add(new Permission(
                                     rs.getString(1),
                                     rs.getString(2),
-                                    rs.getDouble(3),
-                                    rs.getInt(4),
-                                    rs.getString(5),
-                                    rs.getString(6),
-                                    rs.getBinaryStream(7),
-                                    rs.getString(8),
-                                    rs.getTimestamp(9),
-                                    rs.getString(10),
-                                    rs.getBoolean(11)
+                                    rs.getString(3),
+                                    rs.getTimestamp(4),
+                                    rs.getBoolean(5)
                                 ));
                     }
+                    
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -119,17 +108,17 @@ public class ProductImp implements ProductDao {
                 }
             }
         }
-        return productList;
+        return permList;
     }
-    
+
     @Override
-    public boolean update(Product product) {
+    public boolean update(Permission permission) {
         boolean isUpdated = false;
         java.util.Date currentTime = new java.util.Date();
         Optional<DataSource> optDs = getDataSource();
         Optional<Connection> optConn = Optional.empty();
         
-        String query = "UPDATE product SET name = ?, price = ?, quantity = ?, description = ?, imgFormate = ?, img = ?, imgPath = ?, last_Update = ?, category_id = ?, isDelete = ? WHERE id = ?";
+        String query = "UPDATE permission SET name = ?, description = ?, last_Update = ?, isDelete = ? WHERE id = ?";
         
         if(optDs.isPresent()) {
             try {
@@ -137,17 +126,11 @@ public class ProductImp implements ProductDao {
                 
                 if(optConn.isPresent()) {
                     PreparedStatement pstm = optConn.get().prepareStatement(query);
-                    pstm.setString(1, product.getName());
-                    pstm.setDouble(2, product.getPrice());
-                    pstm.setInt(3, product.getQuantity());
-                    pstm.setString(4, product.getDescription());
-                    pstm.setString(5, product.getImgFormate());
-                    pstm.setBlob(6, product.getImg());
-                    pstm.setString(7, product.getImgPath());
-                    pstm.setTimestamp(8, new Timestamp(currentTime.getTime()));
-                    pstm.setString(9, product.getCategoryId());
-                    pstm.setBoolean(10, product.isDelete());
-                    pstm.setString(11, product.getId());
+                    pstm.setString(1, permission.getName());
+                    pstm.setString(2, permission.getDescription());
+                    pstm.setTimestamp(3, new Timestamp(currentTime.getTime()));
+                    pstm.setBoolean(4, permission.isDelete());
+                    pstm.setString(5, permission.getId());
                     
                     if(pstm.executeUpdate() == 1) {
                         isUpdated = true;
@@ -167,15 +150,15 @@ public class ProductImp implements ProductDao {
         }
         return isUpdated;
     }
-    
+
     @Override
-    public Optional<Product> getEntity(Object id) {
-        Optional<Product> optProduct = Optional.empty();
+    public Optional<Permission> getEntity(Object id) {
+        Optional<Permission> optPermission = Optional.empty();
         Optional<DataSource> optDs = getDataSource();
         Optional<Connection> optConn = Optional.empty();
         
-        String query = "SELECT id, name, price, quantity, description, imgFormate, img, imgPath, last_Update, category_id, isDelete FROM product WHERE id = ?";
-        
+        String query = "SELECT id, name, description, last_Update, isDelete FROM permission WHERE id = ?";
+
         if(optDs.isPresent()) {
             try {
                 optConn = Optional.ofNullable(optDs.get().getConnection());
@@ -185,19 +168,14 @@ public class ProductImp implements ProductDao {
                     pstm.setString(1, (String)id);
                     
                     ResultSet rs = pstm.executeQuery();
+                    
                     while(rs.next()){
-                        optProduct = Optional.ofNullable(
-                                    new Product(rs.getString(1),
-                                            rs.getString(2),
-                                            rs.getDouble(3),
-                                            rs.getInt(4),
-                                            rs.getString(5),
-                                            rs.getString(6),
-                                            rs.getBinaryStream(7),
-                                            rs.getString(8),
-                                            rs.getTimestamp(9),
-                                            rs.getString(10),
-                                            rs.getBoolean(11))
+                        optPermission = Optional.ofNullable(
+                                new Permission(rs.getString(1),
+                                        rs.getString(2),
+                                        rs.getString(3),
+                                        rs.getTimestamp(4),
+                                        rs.getBoolean(5))
                                 );
                     }
                 }
@@ -213,9 +191,9 @@ public class ProductImp implements ProductDao {
                 }
             }
         }
-        return optProduct;
+        return optPermission;
     }
-
+    
     private Optional<DataSource> getDataSource(){
         Optional<DataSource> optDs = Optional.empty();
 

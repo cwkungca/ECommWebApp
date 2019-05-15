@@ -25,18 +25,18 @@ import javax.sql.DataSource;
 
 /**
  *
- * @author WayneKung
+ * @author WayneKung-TPX
  */
-public class ProductImp implements ProductDao {
+public class StaffImp implements StaffDao {
 
     @Override
-    public boolean add(Product product) {
+    public boolean add(Staff staff) {
         boolean isAdded = false;
         java.util.Date currentTime = new java.util.Date();
         Optional<DataSource> optDs = getDataSource();
         Optional<Connection> optConn = Optional.empty();
         
-        String query = "INSERT INTO product (id, name, price, quantity, description, imgFormate, img, imgPath, last_Update, category_id, isDelete) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
+        String query = "INSERT INTO staff (id, first_name, last_name, email, password, phone, address, isActive, activeCode, last_update, rol_id, isDelete) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
         
         if(optDs.isPresent()) {
             try {
@@ -44,17 +44,18 @@ public class ProductImp implements ProductDao {
                 
                 if(optConn.isPresent()) {
                     PreparedStatement pstm = optConn.get().prepareStatement(query);
-                    pstm.setString(1, product.getId());
-                    pstm.setString(2, product.getName());
-                    pstm.setDouble(3, product.getPrice());
-                    pstm.setInt(4, product.getQuantity());
-                    pstm.setString(5, product.getDescription());
-                    pstm.setString(6, product.getImgFormate());
-                    pstm.setBlob(7, product.getImg());
-                    pstm.setString(8, product.getImgPath());
-                    pstm.setTimestamp(9, new Timestamp(currentTime.getTime()));
-                    pstm.setString(10, product.getCategoryId());
-                    pstm.setBoolean(11, product.isDelete());
+                    pstm.setString(1, staff.getId());
+                    pstm.setString(2, staff.getFirstName());
+                    pstm.setString(3, staff.getLastName());
+                    pstm.setString(4, staff.getEmail());
+                    pstm.setString(5, staff.getPassword());
+                    pstm.setString(6, staff.getPhone());
+                    pstm.setString(7, staff.getAddress());
+                    pstm.setBoolean(8, staff.isDelete());
+                    pstm.setString(9, staff.getActiveCode());
+                    pstm.setTimestamp(10, new Timestamp(currentTime.getTime()));
+                    pstm.setString(11, staff.getRol().getId());
+                    pstm.setBoolean(12, staff.isDelete());
                     
                     if(pstm.executeUpdate() == 1) {
                         isAdded = true;
@@ -76,12 +77,16 @@ public class ProductImp implements ProductDao {
     }
 
     @Override
-    public List<Product> getAll(){
-        List<Product> productList = new ArrayList<Product>();
+    public List<Staff> getAll() {
+        List<Staff> staffList = new ArrayList<Staff>();
         Optional<DataSource> optDs = getDataSource();
         Optional<Connection> optConn = Optional.empty();
         
-        String query = "SELECT id, name, price, quantity, description, imgFormate, img, imgPath, last_Update, category_id, isDelete FROM product";
+        //  get Rols
+        RolDao rolDao = new RolImp();
+        Optional<List<Rol>> optRol = Optional.ofNullable(rolDao.getAll());
+        
+        String query = "SELECT id, first_name, last_name, email, password, phone, address, isActive, activeCode, last_update, rol_id, isDelete FROM staff";
         
         if(optDs.isPresent()) {
             try {
@@ -92,19 +97,28 @@ public class ProductImp implements ProductDao {
                     
                     ResultSet rs = pstm.executeQuery();
                     while(rs.next()){
-                        productList.add(new Product(
-                                    rs.getString(1),
-                                    rs.getString(2),
-                                    rs.getDouble(3),
-                                    rs.getInt(4),
-                                    rs.getString(5),
-                                    rs.getString(6),
-                                    rs.getBinaryStream(7),
-                                    rs.getString(8),
-                                    rs.getTimestamp(9),
-                                    rs.getString(10),
-                                    rs.getBoolean(11)
-                                ));
+                        Staff staff = new Staff();
+                        staff.setId(rs.getString(1));
+                        staff.setFirstName(rs.getString(2));
+                        staff.setLastName(rs.getString(3));
+                        staff.setEmail(rs.getString(4));
+                        staff.setPassword(rs.getString(5));
+                        staff.setPhone(rs.getString(6));
+                        staff.setAddress(rs.getString(7));
+                        staff.setActive(rs.getBoolean(8));
+                        staff.setActiveCode(rs.getString(9));
+                        staff.setLastUpdate(rs.getTimestamp(10));
+                        staff.setDelete(rs.getBoolean(12));
+                        
+                        // set staff's rol 
+                        for(Rol rol : optRol.get()) {
+                            if (rs.getString(11).equals(rol.getId())) {
+                                staff.setRol(rol);
+                                break;
+                            }
+                        }
+                        
+                        staffList.add(staff);
                     }
                 }
             } catch (SQLException e) {
@@ -119,17 +133,17 @@ public class ProductImp implements ProductDao {
                 }
             }
         }
-        return productList;
+        return staffList;
     }
-    
+
     @Override
-    public boolean update(Product product) {
+    public boolean update(Staff staff) {
         boolean isUpdated = false;
         java.util.Date currentTime = new java.util.Date();
         Optional<DataSource> optDs = getDataSource();
         Optional<Connection> optConn = Optional.empty();
         
-        String query = "UPDATE product SET name = ?, price = ?, quantity = ?, description = ?, imgFormate = ?, img = ?, imgPath = ?, last_Update = ?, category_id = ?, isDelete = ? WHERE id = ?";
+        String query = "UPDATE rol SET first_name = ?, last_name = ?, email = ?, password = ?, phone = ?, address = ?, isActive = ?, activeCode = ?, last_update = ?, rol_id = ?, isDelete = ? WHERE id = ?";
         
         if(optDs.isPresent()) {
             try {
@@ -137,17 +151,18 @@ public class ProductImp implements ProductDao {
                 
                 if(optConn.isPresent()) {
                     PreparedStatement pstm = optConn.get().prepareStatement(query);
-                    pstm.setString(1, product.getName());
-                    pstm.setDouble(2, product.getPrice());
-                    pstm.setInt(3, product.getQuantity());
-                    pstm.setString(4, product.getDescription());
-                    pstm.setString(5, product.getImgFormate());
-                    pstm.setBlob(6, product.getImg());
-                    pstm.setString(7, product.getImgPath());
-                    pstm.setTimestamp(8, new Timestamp(currentTime.getTime()));
-                    pstm.setString(9, product.getCategoryId());
-                    pstm.setBoolean(10, product.isDelete());
-                    pstm.setString(11, product.getId());
+                    pstm.setString(1, staff.getFirstName());
+                    pstm.setString(2, staff.getLastName());
+                    pstm.setString(3, staff.getEmail());
+                    pstm.setString(4, staff.getPassword());
+                    pstm.setString(5, staff.getPhone());
+                    pstm.setString(6, staff.getAddress());
+                    pstm.setBoolean(7, staff.isActive());
+                    pstm.setString(8, staff.getActiveCode());
+                    pstm.setTimestamp(9, new Timestamp(currentTime.getTime()));
+                    pstm.setString(10, staff.getRol().getId());
+                    pstm.setBoolean(11, staff.isDelete());
+                    pstm.setString(12, staff.getId());
                     
                     if(pstm.executeUpdate() == 1) {
                         isUpdated = true;
@@ -167,14 +182,14 @@ public class ProductImp implements ProductDao {
         }
         return isUpdated;
     }
-    
+
     @Override
-    public Optional<Product> getEntity(Object id) {
-        Optional<Product> optProduct = Optional.empty();
+    public Optional<Staff> getEntity(Object id) {
+        Optional<Staff> optStaff = Optional.empty();
         Optional<DataSource> optDs = getDataSource();
         Optional<Connection> optConn = Optional.empty();
         
-        String query = "SELECT id, name, price, quantity, description, imgFormate, img, imgPath, last_Update, category_id, isDelete FROM product WHERE id = ?";
+        String query = "SELECT id, first_name, last_name, email, password, phone, address, isActive, activeCode, last_update, rol_id, isDelete FROM staff WHERE id = ?";
         
         if(optDs.isPresent()) {
             try {
@@ -185,21 +200,30 @@ public class ProductImp implements ProductDao {
                     pstm.setString(1, (String)id);
                     
                     ResultSet rs = pstm.executeQuery();
+                    
+                    //  get Rols
+                    RolDao rolDao = new RolImp();
+                    
                     while(rs.next()){
-                        optProduct = Optional.ofNullable(
-                                    new Product(rs.getString(1),
-                                            rs.getString(2),
-                                            rs.getDouble(3),
-                                            rs.getInt(4),
-                                            rs.getString(5),
-                                            rs.getString(6),
-                                            rs.getBinaryStream(7),
-                                            rs.getString(8),
-                                            rs.getTimestamp(9),
-                                            rs.getString(10),
-                                            rs.getBoolean(11))
-                                );
+                        Staff staff = new Staff();
+                        staff.setId(rs.getString(1));
+                        staff.setFirstName(rs.getString(2));
+                        staff.setLastName(rs.getString(3));
+                        staff.setEmail(rs.getString(4));
+                        staff.setPassword(rs.getString(5));
+                        staff.setPhone(rs.getString(6));
+                        staff.setAddress(rs.getString(7));
+                        staff.setActive(rs.getBoolean(8));
+                        staff.setActiveCode(rs.getString(9));
+                        staff.setLastUpdate(rs.getTimestamp(10));
+                        staff.setDelete(rs.getBoolean(12));
+                        
+                        // get staff's rol
+                        staff.setRol(rolDao.getEntity(rs.getString(11)).get());
+                        
+                        optStaff = Optional.ofNullable(staff);
                     }
+                    
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -213,7 +237,7 @@ public class ProductImp implements ProductDao {
                 }
             }
         }
-        return optProduct;
+        return optStaff;
     }
 
     private Optional<DataSource> getDataSource(){

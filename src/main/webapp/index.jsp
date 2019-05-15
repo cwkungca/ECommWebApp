@@ -6,21 +6,16 @@
 </div>
 
 <div id="indexRightColumn">
-	<div class="categoryBox">
-		<a href="#"> <span class="categoryLabelText">dairy</span>
-		</a>
-	</div>
-	<div class="categoryBox">
-		<a href="#"> <span class="categoryLabelText">meats</span>
-		</a>
-	</div>
-	<div class="categoryBox">
-		<a href="#"> <span class="categoryLabelText">bakery</span>
-		</a>
-	</div>
-	<div class="categoryBox">
-		<a href="#"> <span class="categoryLabelText">fruit & veg</span>
-		</a>
-	</div>
+    <c:forEach var="category" items="${categories}">
+        <div class="categoryBox">
+            <a href="<%= request.getContextPath() %>/category?catid=${category.id}">
+                <span class="categoryLabel"></span>
+                <span class="categoryLabelText">${category.name}</span>
+                
+                <img alt="${category.name}"
+                 src="Image?part=cat&num=${category.id}" class="categoryImage">
+            </a>
+        </div>
+    </c:forEach>
 </div>
 

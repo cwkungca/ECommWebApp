@@ -11,12 +11,20 @@
 
 package com.ecomm.src.dao;
 
+import java.util.List;
+import java.util.Optional;
+
 /**
  *
- * @author WayneKung
+ * @author WayneKung-TPX
  */
-public interface CategoryDao extends CommonDao<Category>{
-
-    public Category getCatProducts(Object categoryId);
+public interface CommonDao<T> {
     
+    public boolean add(T entity);
+    
+    public List<T> getAll();
+    
+    public boolean update(T entity);
+
+    public Optional<T> getEntity(Object id);
 }

@@ -11,16 +11,10 @@
 
 package com.ecomm.src.dao;
 
-import java.util.List;
-
 /**
  *
  * @author WayneKung
  */
-public interface ProductDao {
+public interface ProductDao extends CommonDao<Product>{
     
-    public boolean addProduct(Product product);
-    
-    public List<Product> getProducts(String categoryId);
-
 }

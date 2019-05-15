@@ -15,9 +15,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,17 +24,17 @@ import javax.sql.DataSource;
 
 /**
  *
- * @author WayneKung
+ * @author WayneKung-TPX
  */
-public class CategoryImp implements CategoryDao {
+public class CustomerImp implements CustomerDao {
 
-    public boolean add(Category category) {
+    @Override
+    public boolean add(Customer customer) {
         boolean isAdded = false;
-        java.util.Date currentTime = new java.util.Date();
         Optional<DataSource> optDs = getDataSource();
         Optional<Connection> optConn = Optional.empty();
         
-        String query = "INSERT INTO category (id, name, imgFormate, img, imgPath, last_update, isDelete) VALUES(?,?,?,?,?,?,?)";
+        String query = "INSERT INTO customer (id, name, email, password, phone, address, city_region, cc_number, activeCode, isDelete) VALUES(?,?,?,?,?,?,?,?,?,?)";
         
         if(optDs.isPresent()) {
             try {
@@ -44,13 +42,16 @@ public class CategoryImp implements CategoryDao {
                 
                 if(optConn.isPresent()) {
                     PreparedStatement pstm = optConn.get().prepareStatement(query);
-                    pstm.setString(1, category.getId());
-                    pstm.setString(2, category.getName());
-                    pstm.setString(3, category.getImgFormate());
-                    pstm.setBlob(4, category.getImg());
-                    pstm.setString(5, category.getImgPath());
-                    pstm.setTimestamp(6, new Timestamp(currentTime.getTime()));
-                    pstm.setBoolean(7, category.isDelete());
+                    pstm.setString(1, customer.getId());
+                    pstm.setString(2, customer.getName());
+                    pstm.setString(3, customer.getEmail());
+                    pstm.setString(4, customer.getPassword());
+                    pstm.setString(5, customer.getPhone());
+                    pstm.setString(6, customer.getAddress());
+                    pstm.setString(7, customer.getCityRegion());
+                    pstm.setString(8, customer.getCcNumber());
+                    pstm.setString(9, customer.getActiveCode());
+                    pstm.setBoolean(10, customer.isDelete());
                     
                     if(pstm.executeUpdate() == 1) {
                         isAdded = true;
@@ -70,14 +71,14 @@ public class CategoryImp implements CategoryDao {
         }
         return isAdded;
     }
-    
+
     @Override
-    public List<Category> getAll() {
-        List<Category> categoryList = new ArrayList<Category>();
+    public List<Customer> getAll() {
+        List<Customer> customerList = new ArrayList<Customer>();
         Optional<DataSource> optDs = getDataSource();
         Optional<Connection> optConn = Optional.empty();
-        
-        String query = "SELECT id, name, imgFormate, img, imgPath, last_update, isDelete FROM category";
+
+        String query = "SELECT id, name, email, password, phone, address, city_region, cc_number, isActive, activeCode, isDelete FROM customer";
         
         if(optDs.isPresent()) {
             try {
@@ -88,14 +89,18 @@ public class CategoryImp implements CategoryDao {
                     
                     ResultSet rs = pstm.executeQuery();
                     while(rs.next()){
-                        categoryList.add(new Category(
+                        customerList.add(new Customer(
                                     rs.getString(1),
                                     rs.getString(2),
                                     rs.getString(3),
-                                    rs.getBinaryStream(4),
+                                    rs.getString(4),
                                     rs.getString(5),
-                                    rs.getTimestamp(6),
-                                    rs.getBoolean(7)
+                                    rs.getString(6),
+                                    rs.getString(7),
+                                    rs.getString(8),
+                                    rs.getBoolean(9),
+                                    rs.getString(10),
+                                    rs.getBoolean(11)
                                 ));
                     }
                 }
@@ -111,17 +116,16 @@ public class CategoryImp implements CategoryDao {
                 }
             }
         }
-        return categoryList;
+        return customerList;
     }
-    
+
     @Override
-    public boolean update(Category category) {
+    public boolean update(Customer customer) {
         boolean isUpdated = false;
-        java.util.Date currentTime = new java.util.Date();
         Optional<DataSource> optDs = getDataSource();
         Optional<Connection> optConn = Optional.empty();
         
-        String query = "UPDATE category SET name = ?, imgFormate = ?, img = ?, imgPath = ?, last_update = ?, isDelete = ? WHERE id = ?";
+        String query = "UPDATE customer SET name = ?, email = ?, password = ?, phone = ?, address = ?, city_region = ?, cc_number = ?, activeCode = ?, isDelete = ? WHERE id = ?";
 
         if(optDs.isPresent()) {
             try {
@@ -129,13 +133,16 @@ public class CategoryImp implements CategoryDao {
                 
                 if(optConn.isPresent()) {
                     PreparedStatement pstm = optConn.get().prepareStatement(query);
-                    pstm.setString(1, category.getName());
-                    pstm.setString(2, category.getImgFormate());
-                    pstm.setBlob(3, category.getImg());
-                    pstm.setString(4, category.getImgPath());
-                    pstm.setTimestamp(5, new Timestamp(currentTime.getTime()));
-                    pstm.setBoolean(6, category.isDelete());
-                    pstm.setString(7, category.getId());
+                    pstm.setString(1, customer.getName());
+                    pstm.setString(2, customer.getEmail());
+                    pstm.setString(3, customer.getPassword());
+                    pstm.setString(4, customer.getPhone());
+                    pstm.setString(5, customer.getAddress());
+                    pstm.setString(6, customer.getCityRegion());
+                    pstm.setString(7, customer.getCcNumber());
+                    pstm.setString(8, customer.getActiveCode());
+                    pstm.setBoolean(9, customer.isDelete());
+                    pstm.setString(10, customer.getId());
                     
                     if(pstm.executeUpdate() == 1) {
                         isUpdated = true;
@@ -157,12 +164,12 @@ public class CategoryImp implements CategoryDao {
     }
     
     @Override
-    public Optional<Category> getEntity(Object id) {
-        Optional<Category> optCategory = Optional.empty();
+    public Optional<Customer> getEntity(Object email) {
+        Optional<Customer> optCustomer = Optional.empty();
         Optional<DataSource> optDs = getDataSource();
         Optional<Connection> optConn = Optional.empty();
         
-        String query = "SELECT id, name, imgFormate, img, imgPath, last_update, isDelete FROM category WHERE id = ?";
+        String query = "SELECT id, name, email, password, phone, address, city_region, cc_number, isActive, activeCode, isDelete FROM customer WHERE email = ?";
         
         if(optDs.isPresent()) {
             try {
@@ -170,19 +177,22 @@ public class CategoryImp implements CategoryDao {
                 
                 if(optConn.isPresent()) {
                     PreparedStatement pstm = optConn.get().prepareStatement(query);
-                    pstm.setString(1, (String)id);
+                    pstm.setString(1, (String)email);
                     
                     ResultSet rs = pstm.executeQuery();
-                    
                     while(rs.next()){
-                        optCategory = Optional.ofNullable(
-                                new Category(rs.getString(1),
-                                        rs.getString(2),
-                                        rs.getString(3),
-                                        rs.getBinaryStream(4),
-                                        rs.getString(5),
-                                        rs.getTimestamp(6),
-                                        rs.getBoolean(7))
+                        optCustomer = Optional.ofNullable(
+                                    new Customer(rs.getString(1),
+                                            rs.getString(2),
+                                            rs.getString(3),
+                                            rs.getString(4),
+                                            rs.getString(5),
+                                            rs.getString(6),
+                                            rs.getString(7),
+                                            rs.getString(8),
+                                            rs.getBoolean(9),
+                                            rs.getString(10),
+                                            rs.getBoolean(11))
                                 );
                     }
                 }
@@ -198,19 +208,16 @@ public class CategoryImp implements CategoryDao {
                 }
             }
         }
-        return optCategory;
+        return optCustomer;
     }
-
+    
     @Override
-    public Category getCatProducts(Object categoryId) {
-        Category category = new Category();
-        List<Product> productsList = new ArrayList<Product>();
-        Optional<Collection<Product>> optProducts = Optional.empty();
+    public Optional<Customer> getUser(String acc, String pwd) {
+        Optional<Customer> optCustomer = Optional.empty();
         Optional<DataSource> optDs = getDataSource();
         Optional<Connection> optConn = Optional.empty();
         
-        String query = "SELECT id, name, imgFormate, img, imgPath, last_update, isDelete FROM category WHERE id = ?";
-        String queryProducts = "SELECT id, name, price, quantity, description, imgFormate, img, imgPath, last_Update, category_id, isDelete FROM product WHERE category_id = ?";
+        String query = "SELECT id, name, email, password, phone, address, city_region, cc_number, isActive, activeCode, isDelete FROM customer WHERE email = ? AND password = ? AND isActive = true AND isDelete = false";
         
         if(optDs.isPresent()) {
             try {
@@ -218,42 +225,24 @@ public class CategoryImp implements CategoryDao {
                 
                 if(optConn.isPresent()) {
                     PreparedStatement pstm = optConn.get().prepareStatement(query);
-                    pstm.setString(1, (String)categoryId);
-                    
-                    PreparedStatement pstmProducts = optConn.get().prepareStatement(queryProducts);
-                    pstmProducts.setString(1, (String)categoryId);
+                    pstm.setString(1, (String)acc);
+                    pstm.setString(2, (String)pwd);
                     
                     ResultSet rs = pstm.executeQuery();
-                    ResultSet rsProducts = pstmProducts.executeQuery();
-                    
                     while(rs.next()){
-                        category.setId(rs.getString(1));
-                        category.setName(rs.getString(2));
-                        category.setImgFormate(rs.getString(3));
-                        category.setImg(rs.getBinaryStream(4));
-                        category.setImgPath(rs.getString(5));
-                        category.setLastUpdate(rs.getTimestamp(6));
-                        category.setDelete(rs.getBoolean(7));
-                        
-                        while(rsProducts.next()) {
-                            productsList.add(new Product(
-                                    rsProducts.getString(1),
-                                    rsProducts.getString(2),
-                                    rsProducts.getDouble(3),
-                                    rsProducts.getInt(4),
-                                    rsProducts.getString(5),
-                                    rsProducts.getString(6),
-                                    rsProducts.getBinaryStream(7),
-                                    rsProducts.getString(8),
-                                    rsProducts.getTimestamp(9),
-                                    rsProducts.getString(10),
-                                    rsProducts.getBoolean(11)
-                                ));
-                        }
-                        if(productsList.size() > 0) {
-                            optProducts = Optional.ofNullable(productsList);
-                        }
-                        category.setCatProducts(optProducts);
+                        optCustomer = Optional.ofNullable(
+                                    new Customer(rs.getString(1),
+                                            rs.getString(2),
+                                            rs.getString(3),
+                                            rs.getString(4),
+                                            rs.getString(5),
+                                            rs.getString(6),
+                                            rs.getString(7),
+                                            rs.getString(8),
+                                            rs.getBoolean(9),
+                                            rs.getString(10),
+                                            rs.getBoolean(11))
+                                );
                     }
                 }
             } catch (SQLException e) {
@@ -268,9 +257,9 @@ public class CategoryImp implements CategoryDao {
                 }
             }
         }
-        return category;
+        return optCustomer;
     }
-    
+
     private Optional<DataSource> getDataSource(){
         Optional<DataSource> optDs = Optional.empty();
 

@@ -18,43 +18,20 @@ import java.util.Date;
  *
  * @author WayneKung
  */
-public class Product {
-    private String id;
-    private String name;
+public class Product extends ImgEntity{
     private Double price;
+    private Integer quantity;
     private String description;
-    private String imgFormate;
-    private InputStream img;
-    private Date lastUpdate;
     private String categoryId;
-    private boolean isDelete;
     
     public Product() {}
     
-    public Product(String id, String name, Double price, String description, String imgFormate, InputStream img, Date lastUpdate, String categoryId, boolean isDelete) {
-        this.id = id;
-        this.name = name;
+    public Product(String id, String name, Double price, Integer quantity, String description, String imgFormate, InputStream img, String imgPath, Date lastUpdate, String categoryId, boolean isDelete) {
+        super(id, name, imgFormate, img, imgPath, lastUpdate, isDelete);
         this.price = price;
+        this.quantity = quantity;
         this.description = description;
-        this.imgFormate = imgFormate;
-        this.img = img;
-        this.lastUpdate = lastUpdate;
         this.categoryId = categoryId;
-        this.isDelete = isDelete;
-    }
-    
-    public String getId() {
-        return id;
-    }
-    public void setId(String id) {
-        this.id = id;
-    }
-    
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
     }
     
     public Double getPrice() {
@@ -64,32 +41,19 @@ public class Product {
         this.price = price;
     }
     
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+    
     public String getDescription() {
         return description;
     }
     public void setDescription(String description) {
         this.description = description;
-    }
-    
-    public String getImgFormate() {
-        return imgFormate;
-    }
-    public void setImgFormate(String imgFormate) {
-        this.imgFormate = imgFormate;
-    }
-    
-    public InputStream getImg() {
-        return img;
-    }
-    public void setImg(InputStream img) {
-        this.img = img;
-    }
-    
-    public Date getLastUpdate() {
-        return lastUpdate;
-    }
-    public void setLastUpdate(Date lastUpdate) {
-        this.lastUpdate = lastUpdate;
     }
     
     public String getCategoryId() {
@@ -98,12 +62,5 @@ public class Product {
     public void setCategoryId(String categoryId) {
         this.categoryId = categoryId;
     }
-    
-    public boolean isDelete() {
-        return isDelete;
-    }
-    public void setDelete(boolean isDelete) {
-        this.isDelete = isDelete;
-    }
-    
+
 }

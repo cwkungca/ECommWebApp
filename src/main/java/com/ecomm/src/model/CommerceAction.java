@@ -9,14 +9,18 @@
  * into with WayneKung Co., Ltd.
  */
 
-package com.ecomm.src.dao;
+package com.ecomm.src.model;
+
+import com.ecomm.src.dao.Customer;
+import com.ecomm.src.dao.CustomerOrder;
+import com.ecomm.src.dao.Delivery;
 
 /**
  *
- * @author WayneKung
+ * @author WayneKung-TPX
  */
-public interface CategoryDao extends CommonDao<Category>{
-
-    public Category getCatProducts(Object categoryId);
+public interface CommerceAction {
     
+    public CustomerOrder generateOrder(Customer cust, ShoppingCart cart, Delivery del);
+
 }

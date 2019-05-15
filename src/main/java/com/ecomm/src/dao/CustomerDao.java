@@ -11,12 +11,14 @@
 
 package com.ecomm.src.dao;
 
+import java.util.Optional;
+
 /**
  *
- * @author WayneKung
+ * @author WayneKung-TPX
  */
-public interface CategoryDao extends CommonDao<Category>{
-
-    public Category getCatProducts(Object categoryId);
+public interface CustomerDao extends CommonDao<Customer> {
     
+    public Optional<Customer> getUser(String acc, String pwd);
+
 }
