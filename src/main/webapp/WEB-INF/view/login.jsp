@@ -6,6 +6,10 @@
 
         <p><strong>Password:</strong>
             <input type="password" size="20" name="password"></p>
+            
+        <c:if test="${message.isPresent()}">
+            <p class="error">${message.get()}</p>
+        </c:if>
 
         <p><input type="submit" value="submit"></p>
     </div>

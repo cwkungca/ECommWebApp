@@ -22,6 +22,8 @@ import com.ecomm.src.dao.ProductImp;
 import com.ecomm.src.model.CommerceAction;
 import com.ecomm.src.model.CommerceActionImp;
 import com.ecomm.src.model.ShoppingCart;
+import com.ecomm.src.model.UserAction;
+import com.ecomm.src.model.UserActionImp;
 import com.ecomm.src.model.Validator;
 import com.ecomm.src.service.CategoryFacade;
 import com.ecomm.src.service.CustomerFacade;
@@ -98,7 +100,8 @@ public class ControllerServlet extends HttpServlet {
 			//TODO: Implement language request
 			
 		} else if(userPath.equals("/login")) {
-			System.out.println("------backurl referer 1 : " + request.getHeader("referer"));
+			
+			userPath = "/login";
 		}
 		
 		// use RequestDispatcher to forward request internally
@@ -212,8 +215,6 @@ public class ControllerServlet extends HttpServlet {
 		
 		// if login action is called
 		} else if(userPath.equals("/login")) {
-			System.out.println("------backurl referer : " + request.getHeader("referer"));
-
 			session = request.getSession();
 		    
 		    // get Account and Password from request
@@ -221,8 +222,13 @@ public class ControllerServlet extends HttpServlet {
             Optional<String> optPwd = Optional.ofNullable(request.getParameter("password"));
             
             if(validator.validateInput(optAcc) && validator.validateInput(optPwd)) {
+            	
+            	// encrypt Password
+            	UserAction userAction = new UserActionImp();
+            	String encPwd = userAction.encrypt(optPwd.get());
+            	
                 optCustomer = new CustomerFacade(new Customer(), new CustomerImp())
-                        .getLoginUser(optAcc.get(), optPwd.get());
+                        .getLoginUser(optAcc.get(), encPwd);
                 
                 if(optCustomer.isPresent()) {
                     session.setAttribute("user", optCustomer.get());
@@ -235,7 +241,7 @@ public class ControllerServlet extends HttpServlet {
             }
             
             if(optMessage.isPresent()) {
-                session.setAttribute("message", optMessage.get());
+                session.setAttribute("message", optMessage);
                 userPath = "/login";
               
             } else {

@@ -11,10 +11,30 @@
 
 package com.ecomm.src.model;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 /**
  *
  * @author WayneKung-TPX
  */
 public class UserActionImp implements UserAction {
+	
+	public String encrypt(String plaintext) {
+		StringBuffer sbCiphertext = new StringBuffer();
+		
+		try {
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			byte byteData[] = md.digest(plaintext.getBytes());
+			
+			for(int i= 0; i < byteData.length; i++){
+				sbCiphertext.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+            }
+			
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		return sbCiphertext.toString();
+	}
 
 }

@@ -17,4 +17,5 @@ package com.ecomm.src.model;
  */
 public interface UserAction {
 
+	public String encrypt(String plaintext);
 }
