@@ -22,6 +22,20 @@
 	   </c:if>
 	   
 	   <%-- continue shopping widget --%>
+	   <c:set var="value">
+	       <c:choose>
+	           <%-- if 'selectedCategory' session object exists, send user to previously viewed category --%>
+	           <c:when test="${!empty selectedCategory}">
+	               /category?catid=${selectedCategory.id}
+	           </c:when>
+	           <%-- otherwise send user to welcome page --%>
+	           <c:otherwise>
+	               index.jsp
+	           </c:otherwise>
+	       </c:choose>
+	   </c:set>
+	   
+	   <a href="<%= request.getContextPath() %>/${value}" class="bubble hMargin">continue shopping</a>
 	   
 	   <%-- checkout widget --%>
 	   <c:if test="${!empty cart && cart.numOfItems != 0}">

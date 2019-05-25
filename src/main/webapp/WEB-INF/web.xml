@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:jsp="http://java.sun.com/xml/ns/javaee/jsp" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" version="3.0">
-  <display-name>ECommWeb</display-name>
+  <display-name>ECommWebApp</display-name>
   <resource-ref>
     <description>DB Connection</description>
     <res-ref-name>jdbc/AffablebeanPraDB</res-ref-name>
@@ -68,6 +68,7 @@
     <url-pattern>/Image</url-pattern>
   </servlet-mapping>
   
+  <!--  
   <servlet>
     <servlet-name>TestDBServlet</servlet-name>
     <servlet-class>com.ecomm.src.util.TestDBconnection</servlet-class>
@@ -77,4 +78,5 @@
     <servlet-name>TestDBServlet</servlet-name>
     <url-pattern>/TestDB</url-pattern>
   </servlet-mapping>
+  -->  
 </web-app>
